@@ -1,0 +1,21 @@
+import wixSecretsBackend from 'wix-secrets-backend';
+import {fetch} from 'wix-fetch';
+export async function send_algo() {
+   const rapidApiKey = await wixSecretsBackend.getSecret('rapidApiKey');
+   const dropchainAppId = await wixSecretsBackend.getSecret('dropchainAppId');
+   const user1_uid = '<your user1 test uid>'
+   const options = {
+		method: 'POST',
+		headers: {
+			'content-type': 'application/json',
+			'X-RapidAPI-Key': rapidApiKey,
+			'X-RapidAPI-Host': 'dropchain1.p.rapidapi.com'
+		},
+		body: '{"app_id":"' + dropchainAppId + '","asset1_amount_int":"1","receiver1_address":"OWFOJV26FEOAQJ26Y4CO6NPNILVD2SA253RBEMUX2RDEBRWURRVLO56HRY","transaction1_note":"test wix txn","user1_uid":"' + user1_uid + '"}'
+	}; 
+  // you must change the body based on your test users account info within your dropchain backend
+	fetch('https://dropchain1.p.rapidapi.com/dropchain/v1/send_algo?n=1', options)
+		.then(response => response.json())
+		.then(response => console.log(response))
+		.catch(err => console.error(err));
+}
